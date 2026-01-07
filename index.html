@@ -14,11 +14,14 @@
                 extend: {
                     colors: {
                         'primary-brand': '#A78BFA',
+                        'primary-inverse': '#FFFFFF',
                         'nav-bg': '#9d80f3',
                         'success-mint': '#6EE7B7',
                         'streak-coral': '#FDA4AF',
                         'accent-purple': '#4C1D95',
                         'gold-shine': '#FBBF24',
+                        'progress-track': '#B4C0FF',
+                        'progress-fill': '#6366F1',
                     },
                     backgroundImage: {
                         'ethereal-gradient': 'linear-gradient(to bottom, #C4B5FD, #A5B4FC, #E0E7FF)',
@@ -28,98 +31,78 @@
                         'habit': '16px',
                     },
                     boxShadow: {
-                        'dreamy': '0 10px 40px -10px rgba(167, 139, 250, 0.25)',
-                        'inner-light': 'inset 0 2px 4px rgba(255, 255, 255, 0.4)',
+                        'dreamy': '0 10px 40px -10px rgba(167, 139, 250, 0.4)',
                         'nav-dock': '0 -10px 40px rgba(76, 29, 149, 0.15)',
                     }
                 }
             }
         }
     </script>
-    <style type="text/tailwindcss">
-        @layer components {
-            .glass-surface {
-                @apply bg-nav-bg/90 backdrop-blur-[25px] border-t border-white/20;
-            }
-            .glass-card {
-                @apply bg-[#FFFFFF] border border-white/40 border-t-white/60 shadow-dreamy rounded-habit;
-            }
-            .text-primary-inverse { color: #FFFFFF; }
-            .text-secondary-inverse { color: rgba(255, 255, 255, 0.85); }
-            
-            .duo-input {
-                @apply border-2 border-gray-100 rounded-habit transition-all h-11 text-base bg-white focus:border-primary-brand focus:ring-0 outline-none;
-            }
-            .duo-btn-primary {
-                @apply rounded-habit font-black transition-all active:scale-95;
-            }
-            .text-h2 {
-                @apply text-2xl font-extrabold tracking-tight;
-            }
-        }
-        
+    <style>
         body {
-            font-family: 'PingFang TC', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(to bottom, #C4B5FD, #A5B4FC, #E0E7FF);
+            font-family: 'PingFang TC', 'Inter', sans-serif;
+            background: linear-gradient(to bottom, #C4B5FD, #A5B4FC, #E0E7FF) !important;
             height: 100dvh;
+            margin: 0;
             overflow: hidden;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            font-size: 16px;
         }
 
-        @keyframes rainbow-flow {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
+        .dreamy-bg-fixed {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
         }
-        .animate-rainbow {
-            background-size: 200% 100%;
-            animation: rainbow-flow 3s linear infinite;
+
+        .cloud-glow-1 {
+            position: absolute;
+            width: 300px; height: 300px;
+            top: -50px; left: -50px;
+            background: #A78BFA;
+            filter: blur(90px);
+            opacity: 0.5;
+            border-radius: 50%;
+        }
+
+        .cloud-glow-2 {
+            position: absolute;
+            width: 400px; height: 400px;
+            bottom: -50px; right: -50px;
+            background: #6366F1;
+            filter: blur(110px);
+            opacity: 0.4;
+            border-radius: 50%;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.72) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            border-radius: 16px !important;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
+            50% { transform: translateY(-12px); }
         }
         .animate-float { animation: float 4s ease-in-out infinite; }
 
-        @keyframes cloud-pulse {
-            0%, 100% { transform: scale(1); opacity: 0.15; filter: blur(40px); }
-            50% { transform: scale(1.1); opacity: 0.3; filter: blur(60px); }
+        .custom-scroll {
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
-        .cloud-glow {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            pointer-events: none;
-            animation: cloud-pulse 8s ease-in-out infinite;
-        }
+        .custom-scroll::-webkit-scrollbar { display: none; }
 
-        @keyframes confetti-fall {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(600px) rotate(360deg); opacity: 0; }
+        .week-grid, .month-grid {
+            display: grid;
+            gap: 6px;
         }
-        .confetti {
-            position: absolute;
-            width: 10px; height: 10px;
-            z-index: 200;
-            pointer-events: none;
-        }
-        .confetti-active { animation: confetti-fall 2s ease-out forwards; }
-
-        .energy-flash { animation: flash 0.6s ease-out; }
-        @keyframes flash {
-            0% { filter: brightness(1); }
-            50% { filter: brightness(1.3); transform: scale(1.02); }
-            100% { filter: brightness(1); }
-        }
-
-        .animate-slide-up { animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-
+        .week-grid { grid-template-columns: repeat(7, 1fr); }
+        .month-grid { grid-template-columns: repeat(7, 1fr); }
+        
         .swipe-item-container {
             position: relative;
             overflow: hidden;
@@ -129,358 +112,292 @@
         .swipe-content {
             position: relative;
             z-index: 10;
-            transition: transform 0.3s ease-out;
-            background: #FFFFFF;
-        }
-        .swipe-action {
-            position: absolute;
-            top: 0; right: 0; bottom: 0;
-            width: 80px;
-            color: white;
-            display: flex; align-items: center; justify-content: center;
-            z-index: 5;
+            background-color: white;
+            transition: transform 0.3s ease;
         }
 
-        ::-webkit-scrollbar { display: none; }
-        
-        .content-scroll-area {
-            height: calc(100dvh - 84px);
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+        @keyframes confetti-pop {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) scale(0); opacity: 0; }
+        }
+        .confetti-particle {
+            position: fixed;
+            z-index: 200;
+            pointer-events: none;
+            animation: confetti-pop 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
         }
 
-        .theme-scroll-area {
-            @apply flex gap-4 overflow-x-auto px-2 py-4 snap-x;
-        }
-        .theme-chip {
-            @apply flex-shrink-0 rounded-[16px] shadow-sm flex items-center justify-center text-white transition-all cursor-pointer snap-center;
-            width: 52px; height: 52px;
-        }
-        .theme-chip.active { @apply ring-4 ring-primary-brand ring-offset-2 scale-110 shadow-lg; }
-
-        .week-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            width: 100%;
-            gap: 6px;
-        }
-
-        .timeline-line {
-            @apply absolute left-[17px] top-[40px] bottom-[-24px] w-[2px] bg-primary-brand/20;
-        }
-        .timeline-group:last-child .timeline-item:last-child .timeline-line {
-            @apply h-[20px] bottom-auto;
-        }
-        .timeline-dot {
-            @apply w-9 h-9 rounded-full bg-white border-4 border-primary-brand/30 shadow-sm flex items-center justify-center z-10;
-        }
-        .timeline-dot-inner {
-            @apply w-2.5 h-2.5 rounded-full bg-primary-brand animate-pulse;
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="max-w-md mx-auto relative overflow-hidden">
+<body class="max-w-md mx-auto relative overflow-hidden text-left">
 
-<div id="app" class="flex flex-col h-full relative z-10">
-    <!-- 背景裝飾 -->
-    <div class="cloud-glow w-64 h-64 -top-20 -left-20"></div>
-    <div class="cloud-glow w-80 h-80 top-2/3 -right-32 opacity-20"></div>
+<!-- 物理漸層背景層 -->
+<div class="dreamy-bg-fixed">
+    <div class="cloud-glow-1"></div>
+    <div class="cloud-glow-2"></div>
+</div>
 
-    <!-- Confetti -->
-    <div v-if="showConfetti" class="fixed inset-0 pointer-events-none z-[200] overflow-hidden">
-        <div v-for="c in confettiList" :key="c.id" 
-             :class="['confetti', 'confetti-active']"
-             :style="{ left: c.x + '%', backgroundColor: c.color, animationDelay: c.delay + 's', width: c.size + 'px', height: c.size + 'px' }">
-        </div>
+<div id="app" class="flex flex-col h-dvh overflow-hidden relative z-10">
+    
+    <!-- 打卡拉炮特效粒子 -->
+    <div v-for="c in confettiList" :key="c.id" 
+         class="confetti-particle"
+         :style="{ 
+            left: c.originX + 'px', 
+            top: c.originY + 'px', 
+            backgroundColor: c.color, 
+            width: c.size + 'px', 
+            height: c.size + 'px', 
+            '--tw-translate-x': c.tx + 'px', 
+            '--tw-translate-y': c.ty + 'px', 
+            '--tw-rotate': c.rot + 'deg' 
+         }">
     </div>
 
-    <!-- Header -->
-    <header class="h-[44px] px-4 flex items-center bg-transparent z-40 flex-shrink-0 mt-2">
-        <div v-if="activeTab === 'home'" class="flex items-center">
-            <span class="text-[28px] font-black text-primary-inverse tracking-tighter drop-shadow-sm pt-[24px]">{{ todayFormattedFull }}</span>
-        </div>
-        <div v-else class="w-full relative flex justify-center items-center">
-            <h2 class="text-lg font-black text-primary-inverse tracking-widest uppercase drop-shadow-md pt-2">{{ tabTitlesShort[activeTab] }}</h2>
-        </div>
+    <!-- 頂部導覽列 (Radius 0,0,16,16) -->
+    <header class="bg-white/50 backdrop-blur-xl rounded-b-[16px] border-b border-white/30 z-50 flex-shrink-0 relative">
+        <template v-if="activeTab === 'home'">
+            <div class="px-6 pt-4 pb-2 flex items-center justify-between">
+                <div @click="toggleCalendarView" class="flex items-center gap-2 cursor-pointer active:scale-95 transition-transform group text-left">
+                    <span class="font-black text-accent-purple text-xl tracking-tight">{{ statsMonthLabel }}</span>
+                    <i :data-lucide="isHistoryMonthView ? 'chevron-up' : 'chevron-down'" class="w-5 h-5 text-accent-purple/30 text-center"></i>
+                </div>
+                <div v-if="!isHistoryMonthView" class="flex items-center gap-2">
+                    <span class="text-[10px] font-black text-accent-purple/30 uppercase">Progress</span>
+                    <div class="px-2.5 py-0.5 rounded-full bg-primary-brand/10 border border-primary-brand/20 text-[10px] font-black text-primary-brand">
+                        {{ dayDoneCount }} / {{ habitsForSelectedDay.length }}
+                    </div>
+                </div>
+            </div>
+            <!-- 週曆 -->
+            <div v-if="!isHistoryMonthView" class="px-4 pb-4 animate-slide-up text-center">
+                <div class="flex items-center gap-1">
+                    <button @click.stop="changeWeek(-1)" class="w-8 h-8 flex items-center justify-center text-primary-brand active:scale-75 text-center"><i data-lucide="chevron-left" class="w-5 h-5 text-center"></i></button>
+                    <div class="flex-1 week-grid">
+                        <div v-for="day in weekDays" :key="day.date" @click.stop="selectedDate = day.date"
+                             :class="['flex flex-col items-center py-2 rounded-[14px] transition-all cursor-pointer border text-center relative', isSameDay(selectedDate, day.date) ? 'bg-primary-brand border-primary-brand text-white shadow-lg scale-105' : 'bg-white/30 border-transparent text-accent-purple/40']">
+                            <span class="text-[8px] font-black uppercase mb-0.5">{{ day.label }}</span>
+                            <span class="text-sm font-black">{{ day.dayNum }}</span>
+                            <div v-if="hasLog(day.date)" class="absolute -top-1 -right-1 rounded-full p-0.5 border border-white bg-success-mint text-white flex items-center justify-center"><i data-lucide="check" class="w-2 h-2 text-center"></i></div>
+                        </div>
+                    </div>
+                    <button @click.stop="changeWeek(1)" class="w-8 h-8 flex items-center justify-center text-primary-brand active:scale-75 text-center"><i data-lucide="chevron-right" class="w-5 h-5 text-center"></i></button>
+                </div>
+            </div>
+            <!-- 月曆 -->
+            <div v-if="isHistoryMonthView" class="px-6 pb-6 animate-slide-up text-center">
+                <div class="flex items-center justify-between mb-4">
+                    <button @click="changeMonth(-1)" class="p-2 text-primary-brand active:scale-75 text-center"><i data-lucide="arrow-left" class="w-5 h-5 text-center"></i></button>
+                    <span class="font-black text-accent-purple/20 text-[10px] uppercase tracking-widest text-center">History</span>
+                    <button @click="changeMonth(1)" class="p-2 text-primary-brand active:scale-75 text-center"><i data-lucide="arrow-right" class="w-5 h-5 text-center"></i></button>
+                </div>
+                <div class="month-grid text-center">
+                    <div v-for="dayLabel in weekLabelsShort" :key="dayLabel" class="text-center text-[10px] font-black text-accent-purple/20 uppercase mb-2 text-center">{{ dayLabel }}</div>
+                    <div v-for="(day, idx) in calendarDays" :key="idx" 
+                         @click="selectedDate = day.date; isHistoryMonthView = false"
+                         :class="['relative aspect-square flex items-center justify-center rounded-xl text-sm font-black transition-all cursor-pointer border', 
+                                  !day.currentMonth ? 'opacity-10 border-transparent' : 
+                                  isSameDay(selectedDate, day.date) ? 'bg-primary-brand text-white border-primary-brand shadow-lg scale-105' : 'bg-white/40 border-white/20 text-accent-purple']">
+                        {{ day.date.getDate() }}
+                        <div v-if="hasLog(day.date)" class="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-success-mint text-center text-center"></div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template v-else>
+            <div class="px-6 py-5 flex justify-center items-center relative text-left">
+                <h2 class="text-xl font-black text-accent-purple tracking-tight text-center">{{ activeTab === 'habits' ? '我的習慣列表' : tabTitlesShort[activeTab] }}</h2>
+                <button v-if="activeTab === 'habits' && habits.length > 0" @click="openHabitModal()" 
+                        class="absolute right-5 w-10 h-10 rounded-full bg-primary-brand text-white flex items-center justify-center shadow-lg active:scale-90 transition-transform text-center text-center text-center">
+                    <i data-lucide="plus" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </template>
     </header>
 
-    <!-- 中間內容區 -->
-    <main class="content-scroll-area flex-1">
+    <!-- 主內容區 -->
+    <main class="flex-1 flex flex-col overflow-hidden min-h-0 text-left">
         
-        <!-- 0. 養成主頁 (Home) -->
-        <section v-if="activeTab === 'home'" class="animate-slide-up px-4 pt-2 space-y-6 pb-40">
-            <div class="pt-6"></div>
-            <!-- 吉祥物互動區 -->
-            <div class="relative flex flex-col items-center w-full pt-4 pb-4">
+        <!-- 0. 首頁養成分頁 (1.6 : 1) -->
+        <section v-if="activeTab === 'home'" class="animate-slide-up h-full flex flex-col overflow-hidden min-h-0 text-left">
+            <!-- 寵物區 (Hero Section 權重 1.6) -->
+            <div class="flex-[1.6] flex flex-col items-center justify-center relative px-6 py-2 min-h-0 text-center">
                 <!-- 對話泡泡 -->
-                <div class="absolute -top-4 left-1/2 ml-4 bg-white p-4 rounded-[16px] rounded-bl-none shadow-dreamy z-20 max-w-[180px] text-center border-none">
-                    <p class="text-[15px] font-bold text-accent-purple leading-snug">{{ mascotGreeting }}</p>
-                    <div class="absolute -bottom-2 left-0 w-4 h-4 bg-white transform -rotate-45"></div>
+                <div class="absolute top-6 left-1/2 ml-4 bg-white p-4 rounded-[22px] rounded-bl-none shadow-dreamy z-20 max-w-[170px] text-center border-none">
+                    <p class="text-[13px] font-bold text-accent-purple leading-snug">{{ mascotGreeting }}</p>
+                    <div class="absolute -bottom-1.5 left-0 w-4 h-4 bg-white transform -rotate-45 text-center"></div>
                 </div>
 
-                <div class="relative mb-6 w-44 h-44 flex items-center justify-center">
-                    <div :class="['w-36 h-36 flex items-center justify-center relative z-10 animate-float transition-all duration-500', isAnimating ? 'energy-flash' : '']">
-                        <!-- Mascot SVG -->
-                        <svg v-if="birdLevel === 0" viewBox="0 0 100 100" class="w-24 h-24 drop-shadow-2xl">
-                            <ellipse cx="50" cy="55" rx="32" ry="42" fill="#fff" stroke="#E0E7FF" stroke-width="2" />
-                            <path d="M35 45 Q50 55 65 45" stroke="#A5B4FC" stroke-width="2" fill="none" opacity="0.3" />
-                        </svg>
-                        <svg v-if="birdLevel === 1" viewBox="0 0 100 100" class="w-24 h-24 drop-shadow-2xl">
-                            <circle cx="50" cy="50" r="40" fill="#A78BFA" />
-                            <circle cx="35" cy="40" r="6" fill="white" />
-                            <circle cx="65" cy="40" r="6" fill="white" />
-                            <circle cx="37" cy="38" r="2" fill="#4C1D95" opacity="0.8" />
-                            <circle cx="67" cy="38" r="2" fill="#4C1D95" opacity="0.8" />
-                            <path d="M45 55 L55 55 L50 65 Z" fill="#FBBF24" />
-                        </svg>
-                        <svg v-if="birdLevel === 2" viewBox="0 0 100 100" class="w-30 h-30 drop-shadow-2xl">
-                            <circle cx="50" cy="50" r="46" fill="#A78BFA" />
-                            <circle cx="32" cy="40" r="8" fill="white" />
-                            <circle cx="68" cy="40" r="8" fill="white" />
-                            <circle cx="34" cy="38" r="3" fill="#4C1D95" opacity="0.8" />
-                            <circle cx="70" cy="38" r="3" fill="#4C1D95" opacity="0.8" />
-                            <path d="M40 72 Q50 82 60 72" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" />
-                            <path d="M45 52 L55 52 L50 64 Z" fill="#FBBF24" />
-                        </svg>
-                    </div>
+                <!-- 寵物蛋角色 -->
+                <div :class="['w-40 h-40 flex items-center justify-center relative z-10 animate-float transition-all duration-500 mb-6', isAnimating ? 'brightness-125 scale-105' : '']">
+                    <img v-if="birdLevel === 0" src="https://raw.githubusercontent.com/min-c-cm/vibe-coding-habit/main/egg.svg" alt="Pet Egg" class="w-24 h-24 object-contain drop-shadow-2xl mx-auto">
+                    <svg v-else viewBox="0 0 100 100" class="w-32 h-32 drop-shadow-2xl mx-auto">
+                        <defs><radialGradient id="gradPet" cx="40%" cy="30%" r="60%"><stop offset="0%" style="stop-color:#C4B5FD" /><stop offset="100%" style="stop-color:#A78BFA" /></radialGradient></defs>
+                        <circle cx="50" cy="50" r="46" fill="url(#gradPet)" />
+                        <circle cx="32" cy="40" r="8" fill="white" /><circle cx="68" cy="40" r="8" fill="white" />
+                        <circle cx="34" cy="38" r="3" fill="#4C1D95" opacity="0.8" /><circle cx="70" cy="38" r="3" fill="#4C1D95" opacity="0.8" />
+                        <path d="M45 52 L55 52 L50 64 Z" fill="#FBBF24" />
+                        <path v-if="birdLevel > 1" d="M40 72 Q50 82 60 72" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" />
+                    </svg>
                 </div>
 
-                <!-- 進度條 -->
-                <div class="w-full max-w-[140px] space-y-2">
-                    <div class="w-full bg-white/30 h-3 rounded-full overflow-hidden p-[2px] shadow-inner">
-                        <div class="animate-rainbow h-full rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(110,231,183,0.6)]" 
-                             :class="totalCheckinCount > 0 ? 'bg-rainbow-energy' : 'bg-white/20'"
-                             :style="{ width: Math.min((totalCheckinCount / evolutionRequirement) * 100, 100) + '%' }"></div>
+                <!-- 進度條與等級 -->
+                <div class="w-full max-w-[310px] h-12 bg-progress-track rounded-full relative p-1 flex items-center shadow-inner mt-2 overflow-visible mx-auto text-center">
+                    <div class="absolute left-1 top-1 bottom-1 rounded-full bg-progress-fill transition-all duration-1000 shadow-md flex items-center overflow-hidden"
+                         :style="{ width: 'calc(' + Math.min((totalCheckinCount / (evolutionRequirement || 10)) * 100, 100) + '% - 4px)' }">
+                         <span class="ml-5 text-white font-extrabold text-sm whitespace-nowrap uppercase italic drop-shadow-md text-center">Lv.{{ birdLevel + 1 }}</span>
                     </div>
-                    <div class="flex justify-center">
-                        <span class="text-[10px] font-black text-primary-inverse drop-shadow-sm uppercase tracking-widest">LV.{{ birdLevel + 1 }} Evolution</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 今日計畫 -->
-            <div class="glass-card p-6 space-y-5 w-full relative text-left">
-                <div class="flex justify-between items-center px-1">
-                    <h3 class="font-black text-accent-purple flex items-center gap-2 text-xl">
-                        <i data-lucide="cloud-sun" class="w-6 h-6 text-primary-brand"></i>今日計畫
-                    </h3>
-                    <div v-if="habitsForToday.length > 0" 
-                         :class="['px-3 py-1 rounded-full text-[12px] font-black tracking-tight shadow-sm transition-all', 
-                                  isTodayComplete ? 'bg-gold-shine text-white animate-pulse shadow-[0_0_12px_rgba(251,191,36,0.5)]' : 'bg-primary-brand/10 text-primary-brand border border-primary-brand/20']">
-                        已完成 {{ todayDoneCount }} / {{ habitsForToday.length }}
-                    </div>
-                </div>
-                
-                <div v-if="habitsForToday.length > 0" class="space-y-3 pb-6">
-                    <div v-for="habit in habitsForToday" :key="habit.id" 
-                         class="flex items-center justify-between p-4 rounded-habit bg-gray-50/80 border border-gray-100 transition-all active:scale-[0.97]">
-                        <div class="flex items-center gap-4">
-                            <div :class="['w-11 h-11 rounded-[12px] flex items-center justify-center text-white shadow-sm transition-colors', isCheckedToday(habit.id) ? 'bg-success-mint' : 'bg-primary-brand']">
-                                <i :data-lucide="habit.icon" class="w-6 h-6"></i>
-                            </div>
-                            <span :class="['font-bold text-base text-accent-purple transition-all', isCheckedToday(habit.id) ? 'opacity-30 line-through' : '']">{{ habit.name }}</span>
-                        </div>
-                        <button @click="toggleCheckinToday(habit.id)" 
-                                :class="['w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-sm', 
-                                         isCheckedToday(habit.id) ? 'bg-success-mint text-white' : 'bg-white text-gray-200 border border-gray-100']">
-                            <i data-lucide="check" class="w-6 h-6"></i>
-                        </button>
-                    </div>
-                </div>
-                <div v-else class="text-center py-12">
-                    <p class="text-base font-bold text-accent-purple/40 mb-6 leading-relaxed">開啟你的第一個雲端習慣吧！</p>
-                    <button @click="openHabitModal()" class="bg-primary-brand h-12 rounded-habit px-10 text-white text-base font-black shadow-dreamy active:scale-95 transition-transform">立即開啟</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 1. 歷程 (History) -->
-        <section v-if="activeTab === 'checkin'" class="animate-slide-up px-4 py-4 space-y-4 pb-32 text-left">
-            <div class="glass-card overflow-hidden">
-                <div @click="toggleCalendarView" class="p-4 flex items-center justify-between cursor-pointer active:bg-gray-50">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-primary-brand/10 rounded-2xl flex items-center justify-center text-primary-brand"><i data-lucide="calendar" class="w-5 h-5"></i></div>
-                        <span class="font-black text-accent-purple text-lg">{{ isHistoryMonthView ? statsMonthLabel : formatDateFull(selectedDate) }}</span>
-                    </div>
-                    <i :data-lucide="isHistoryMonthView ? 'chevron-up' : 'chevron-down'" class="w-5 h-5 text-accent-purple/40"></i>
-                </div>
-                
-                <div v-if="!isHistoryMonthView" class="px-2 pb-4 flex items-center justify-center">
-                    <button @click.stop="changeWeek(-1)" class="w-10 h-10 flex flex-shrink-0 items-center justify-center text-primary-brand touch-target"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
-                    <div class="flex-1 week-grid px-1">
-                        <div v-for="day in weekDays" :key="day.date" @click.stop="selectedDate = day.date"
-                             :class="['flex flex-col items-center py-3 rounded-habit border-2 transition-all cursor-pointer relative h-16 justify-center', isSameDay(selectedDate, day.date) ? 'border-primary-brand bg-primary-brand/5' : 'border-transparent bg-gray-50']">
-                            <span :class="['text-[11px] font-black mb-1', isSameDay(selectedDate, day.date) ? 'text-primary-brand' : 'text-accent-purple/40 uppercase']">{{ day.label }}</span>
-                            <span :class="['text-base font-black', isSameDay(selectedDate, day.date) ? 'text-primary-brand' : 'text-accent-purple']">{{ day.dayNum }}</span>
-                            <div v-if="hasLog(day.date)" class="absolute -top-1 -right-1 bg-success-mint text-white rounded-full p-0.5 border border-white shadow-sm"><i data-lucide="check" class="w-2.5 h-2.5"></i></div>
+                    <div class="relative w-full h-full flex items-center justify-end px-12 z-10 pointer-events-none text-white text-center">
+                        <div class="flex items-center gap-2 text-center text-center">
+                            <span class="font-black text-[15px] drop-shadow-lg text-center">{{ totalCheckinCount }} / {{ evolutionRequirement }}</span>
+                            <i data-lucide="zap" class="w-4 h-4 text-gold-shine fill-gold-shine text-center"></i>
                         </div>
                     </div>
-                    <button @click.stop="changeWeek(1)" class="w-10 h-10 flex flex-shrink-0 items-center justify-center text-primary-brand touch-target"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
-                </div>
-                <div v-else class="px-4 pb-6 space-y-4">
-                    <div class="flex justify-between items-center px-1 text-xs">
-                        <button @click.stop="changeStatsMonth(-1)" class="p-2 text-primary-brand touch-target"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
-                        <span class="text-xs font-black text-accent-purple/40 tracking-widest uppercase">月度回顧</span>
-                        <button @click.stop="changeStatsMonth(1)" class="p-2 text-primary-brand touch-target"><i data-lucide="arrow-right" class="w-5 h-5"></i></button>
-                    </div>
-                    <div class="grid grid-cols-7 gap-1">
-                        <div v-for="d in weekLabelsShort" :key="d" class="text-center text-[10px] font-black text-accent-purple/30 pb-2 uppercase">{{ d }}</div>
-                        <div v-for="n in monthOffset" :key="'off'+n" class="aspect-square"></div>
-                        <div v-for="day in daysInMonth" :key="day" @click.stop="selectDateFromMonth(day)"
-                             :class="['aspect-square flex flex-col items-center justify-center rounded-[12px] text-base font-black relative border-2 transition-all', isSameDay(selectedDate, day) ? 'border-primary-brand bg-primary-brand/5 text-primary-brand' : 'border-transparent bg-gray-50 text-accent-purple/60']">
-                            {{ day.getDate() }}
-                            <div v-if="hasLog(day)" class="absolute bottom-1 w-1.5 h-1.5 bg-success-mint rounded-full"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="h-4 bg-gradient-to-b from-white/20 to-transparent"></div>
-            </div>
-
-            <div class="space-y-2 mt-2">
-                <div v-for="habit in habitsForSelectedDay" :key="habit.id" class="glass-card p-4 flex items-center justify-between shadow-sm">
-                    <div class="flex items-center gap-4 flex-1">
-                        <div :class="['w-12 h-12 rounded-[12px] flex items-center justify-center text-white shadow-sm transition-all', isChecked(habit.id) ? 'bg-success-mint' : habit.color]"><i :data-lucide="habit.icon" class="w-6 h-6"></i></div>
-                        <div class="min-w-0 flex-1">
-                            <h3 class="font-black text-base text-accent-purple leading-tight">{{ habit.name }}</h3>
-                            <p v-if="getMood(habit.id)" class="text-sm text-accent-purple/40 italic mt-0.5 truncate max-w-[200px]">「 {{ getMood(habit.id) }} 」</p>
-                        </div>
-                    </div>
-                    <button @click="handleCheckinFeedback(habit)" :class="['w-11 h-11 rounded-full flex items-center justify-center shadow-sm transition-all', isChecked(habit.id) ? 'bg-success-mint text-white' : 'bg-white text-gray-200 border border-gray-100']"><i data-lucide="check" class="w-6 h-6"></i></button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 2. 清單 -->
-        <section v-if="activeTab === 'habits'" class="animate-slide-up px-4 py-4 space-y-4 pb-32 text-left">
-            <transition-group name="list" tag="div" class="space-y-4">
-                <div v-for="habit in sortedHabits" :key="habit.id" class="swipe-item-container shadow-dreamy">
-                    <div class="swipe-action" @click="deleteHabit(habit.id)"><i data-lucide="trash-2" class="w-6 h-6"></i></div>
-                    <div class="swipe-content glass-card !rounded-none p-5 flex flex-col gap-4 border-none" :style="{ transform: swipedId === habit.id ? 'translateX(-80px)' : 'translateX(0)' }" @touchstart="handleTouchStart($event, habit.id)" @touchend="handleTouchEnd($event, habit.id)">
-                        <div class="flex justify-between items-start">
-                            <div class="flex items-center gap-4">
-                                <div :class="['w-14 h-14 rounded-habit flex items-center justify-center text-white shadow-sm', habit.color]"><i :data-lucide="habit.icon" class="w-8 h-8"></i></div>
-                                <div>
-                                    <h3 class="font-black text-lg text-accent-purple leading-tight">{{ habit.name }}</h3>
-                                    <p class="text-base text-accent-purple/40 font-bold mt-1">{{ getHabitTotalDone(habit.id) }} 次達成</p>
-                                </div>
-                            </div>
-                            <button @click.stop="openHabitModal(habit)" class="w-11 h-11 flex items-center justify-center text-primary-brand bg-gray-50 rounded-[12px] active:scale-90 transition-transform"><i data-lucide="edit-3" class="w-6 h-6"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </transition-group>
-        </section>
-
-        <!-- 3. 統計 (Stats) - 重構佈局 -->
-        <section v-if="activeTab === 'stats'" class="animate-slide-up px-4 py-4 space-y-6 pb-32 text-left">
-            <div class="grid grid-cols-4 gap-2">
-                <div v-for="stat in topStats" :key="stat.label" class="glass-card p-3 flex flex-col items-center justify-center text-center space-y-1">
-                    <span class="text-[10px] font-black text-accent-purple/40 uppercase tracking-widest leading-none">{{ stat.label }}</span>
-                    <span class="text-h2 text-accent-purple">{{ stat.value }}</span>
-                </div>
-            </div>
-
-            <div class="flex justify-center">
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/40 border border-white/60 shadow-sm">
-                    <i data-lucide="timer" class="w-3.5 h-3.5 text-primary-brand"></i>
-                    <span class="text-[11px] font-black text-accent-purple/70 uppercase tracking-wider">距離本月結束還有 {{ daysToEndOfMonth }} 天</span>
-                </div>
-            </div>
-
-            <div class="glass-card overflow-hidden">
-                <div class="p-6 flex items-center gap-6 border-b border-gray-50 bg-gradient-to-br from-white to-primary-brand/5">
-                    <div class="w-20 h-20 rounded-full bg-white shadow-dreamy flex items-center justify-center p-1 border-2 border-primary-brand/20 animate-float">
-                        <svg viewBox="0 0 100 100" class="w-full h-full">
-                            <circle cx="50" cy="50" r="40" :fill="birdLevel > 0 ? '#A78BFA' : '#f3f4f6'" />
-                            <circle cx="35" cy="40" r="6" fill="white" />
-                            <circle cx="65" cy="40" r="6" fill="white" />
-                            <path v-if="birdLevel > 1" d="M40 72 Q50 82 60 72" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" />
+                    <div class="absolute right-0.5 w-11 h-11 bg-white rounded-full flex items-center justify-center shadow-md active:scale-125 hover:scale-110 transition-all z-20 border border-purple-50 cursor-pointer">
+                        <svg viewBox="0 0 100 100" class="w-6 h-6 fill-progress-fill text-center">
+                            <path d="M50 15 C35 15 20 35 20 60 C20 80 35 90 50 90 C65 90 80 80 80 60 C80 35 65 15 50 15 Z" />
+                            <path d="M35 50 L45 60 L55 50 L65 60" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </div>
-                    <div class="flex-1 space-y-1">
-                        <h4 class="font-black text-accent-purple text-lg tracking-tight">成長摘要</h4>
-                        <p class="text-sm font-bold text-accent-purple/50 leading-relaxed">{{ mascotGrowthSummary }}</p>
-                    </div>
                 </div>
+            </div>
 
-                <div class="p-6 space-y-4">
-                    <div class="flex justify-between items-center mb-2 px-1 text-xs">
-                        <h3 class="font-black text-accent-purple flex items-center gap-2 uppercase tracking-wider">
-                            <i data-lucide="award" class="w-4 h-4 text-gold-shine"></i> 月度排行
+            <!-- 今日目標區 (16px) -->
+            <div class="flex-1 px-5 pb-5 overflow-hidden flex flex-col min-h-0 text-left text-left text-left">
+                <div class="glass-card flex flex-col h-full overflow-hidden text-left">
+                    <div class="flex-1 custom-scroll p-5 space-y-4">
+                        <h3 class="font-black text-accent-purple text-sm mb-1 px-1 opacity-80 flex items-center gap-2 text-left text-left text-left">
+                            <i data-lucide="target" class="w-4 h-4 text-primary-brand text-center text-center text-center"></i>
+                            今日目標
                         </h3>
-                        <div class="flex items-center gap-2 bg-gray-50 rounded-full px-2 py-0.5">
-                            <button @click="changeStatsMonth(-1)" class="p-1 text-accent-purple/40 touch-target"><i data-lucide="chevron-left" class="w-3.5 h-3.5"></i></button>
-                            <span class="font-black text-accent-purple/80 text-[10px]">{{ statsMonthLabel }}</span>
-                            <button @click="changeStatsMonth(1)" class="p-1 text-accent-purple/40 touch-target"><i data-lucide="chevron-right" class="w-3.5 h-3.5"></i></button>
-                        </div>
-                    </div>
-                    <div class="space-y-3">
-                        <div v-for="(item, idx) in topHabitsByMonth" :key="item.id" class="flex items-center gap-4 bg-gray-50/50 p-3 rounded-habit border border-gray-100">
-                            <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white font-black text-xs" :class="idx === 0 ? 'bg-gold-shine' : 'bg-gray-300'">{{ idx + 1 }}</div>
-                            <div class="flex-1 min-w-0">
-                                <h4 class="font-black text-sm text-accent-purple truncate">{{ item.name }}</h4>
-                            </div>
-                            <span class="text-xs font-black text-accent-purple/60">{{ item.count }} 次</span>
-                        </div>
-                        <div v-if="topHabitsByMonth.length === 0" class="text-center py-4 text-accent-purple/20 italic text-sm font-bold">目前無紀錄</div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="glass-card p-6 space-y-4">
-                <h3 class="font-black text-accent-purple flex items-center gap-2 text-base uppercase tracking-wider px-2">
-                    <i data-lucide="line-chart" class="w-5 h-5 text-primary-brand"></i> 週打卡趨勢 (近期 7 週)
-                </h3>
-                <div class="h-48 w-full relative flex mt-6">
-                    <div class="flex flex-col justify-between text-[10px] font-black text-accent-purple/30 pr-3 pb-8 pt-1 text-right w-6">
-                        <span>{{ weeklyMax }}</span>
-                        <span>{{ Math.round(weeklyMax/2) }}</span>
-                        <span>0</span>
-                    </div>
-                    <div class="flex-1 relative pb-8">
-                        <div class="absolute inset-0 flex flex-col justify-between py-1 opacity-10">
-                            <div class="border-t border-accent-purple w-full"></div>
-                            <div class="border-t border-accent-purple w-full"></div>
-                            <div class="border-t border-accent-purple w-full"></div>
-                        </div>
-                        <svg class="w-full h-full relative z-10 overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
-                            <defs>
-                                <linearGradient id="colorPurple" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#A78BFA;stop-opacity:0.4" />
-                                    <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0" />
-                                </linearGradient>
-                            </defs>
-                            <path :d="smoothWaveAreaPath" fill="url(#colorPurple)" />
-                            <path :d="smoothWavePath" fill="none" stroke="#A78BFA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        <div class="absolute bottom-[-28px] inset-x-0 flex justify-between">
-                            <span v-for="item in weeklyStatsData" :key="item.label" class="text-[9px] font-black text-accent-purple/40 uppercase text-center w-[14%]">{{ item.label }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass-card p-6 space-y-6">
-                <h3 class="font-black text-accent-purple flex items-center gap-2 text-base uppercase tracking-wider px-1">
-                    <i data-lucide="book-heart" class="w-5 h-5 text-streak-coral"></i> 雲端時光回顧
-                </h3>
-                <div v-if="moodLogsByDate.length > 0" class="space-y-10 relative">
-                    <div v-for="group in moodLogsByDate" :key="group.dateStr" class="timeline-group relative">
-                        <div class="flex items-center gap-3 mb-5 relative z-10">
-                            <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
-                            <span class="text-xs font-black text-accent-purple bg-primary-brand/5 px-3 py-1 rounded-full border border-primary-brand/10 shadow-sm">{{ group.dateFormatted }}</span>
-                        </div>
-                        <div class="pl-9 space-y-4 relative">
-                            <div v-for="(log, idx) in group.logs" :key="idx" class="relative timeline-item">
-                                <div class="timeline-line"></div>
-                                <div class="bg-gray-50/50 p-4 rounded-habit border border-gray-100 shadow-sm active:scale-[0.98] transition-all space-y-3">
-                                    <div class="flex items-center gap-3 border-b border-gray-100 pb-2">
-                                        <div :class="['w-8 h-8 rounded-[8px] flex items-center justify-center text-white shadow-sm', log.color]"><i :data-lucide="log.icon" class="w-4 h-4"></i></div>
-                                        <h4 class="font-black text-sm text-accent-purple truncate">{{ log.habitName }}</h4>
+                        <div v-if="habitsForSelectedDay.length > 0" class="space-y-3 pb-8 text-left text-left text-left text-left">
+                            <div v-for="habit in habitsForSelectedDay" :key="habit.id" 
+                                 class="flex items-center justify-between p-4 rounded-[16px] bg-white/80 border border-white shadow-sm transition-all active:scale-[0.97] text-left">
+                                <div class="flex items-center gap-4 min-w-0 flex-1 text-left">
+                                    <div :class="['w-11 h-11 rounded-[14px] flex-shrink-0 flex items-center justify-center text-white shadow-sm transition-all text-center text-center', isChecked(habit.id) ? 'bg-success-mint scale-90' : habit.color]"><i :data-lucide="habit.icon" class="w-6 h-6 text-center text-center text-center"></i></div>
+                                    <div class="min-w-0 flex-1 text-left text-left text-left">
+                                        <span :class="['font-black text-[16px] text-accent-purple block truncate text-left', isChecked(habit.id) ? 'opacity-30 line-through text-left' : 'text-left']">{{ habit.name }}</span>
+                                        <span v-if="isChecked(habit.id) && getMood(habit.id)" class="text-[11px] text-accent-purple/30 italic block truncate mt-0.5 leading-none text-left">「 {{ getMood(habit.id) }} 」</span>
                                     </div>
-                                    <p class="text-[16px] text-accent-purple/90 font-bold italic leading-relaxed">「 {{ log.note }} 」</p>
+                                </div>
+                                <button @click.stop="handleCheckinFeedback(habit, $event)" 
+                                        :class="['w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center transition-all shadow-sm border text-center text-center text-center', isChecked(habit.id) ? 'bg-success-mint border-success-mint text-white shadow-lg' : 'bg-white border-gray-100 text-gray-200']">
+                                    <i data-lucide="check" class="w-6 h-6 text-center"></i>
+                                </button>
+                            </div>
+                            <button @click.stop="openHabitModal()" class="w-full h-12 border-2 border-dashed border-primary-brand/30 rounded-[16px] flex items-center justify-center gap-2 text-primary-brand/70 font-black hover:bg-primary-brand/10 active:scale-95 transition-all mt-2 text-center text-center">
+                                <i data-lucide="plus-circle" class="w-5 h-5 text-center text-center"></i>
+                                <span class="text-sm text-center">新增今日目標</span>
+                            </button>
+                        </div>
+
+                        <!-- 空狀態與 48px 引導按鈕 -->
+                        <div v-else class="h-full flex flex-col items-center justify-center py-6 text-center text-center text-center">
+                            <div class="opacity-20 flex flex-col items-center mb-6">
+                                <i data-lucide="sparkles" class="w-12 h-12 mb-3 text-accent-purple mx-auto text-center text-center text-center"></i>
+                                <p class="text-base font-black italic text-center">此日無計畫</p>
+                            </div>
+                            <button @click.stop="openHabitModal()" class="w-full h-[48px] border-2 border-dashed border-primary-brand/40 rounded-[16px] bg-white/30 hover:bg-white/50 flex items-center justify-center gap-2 text-primary-brand font-black active:scale-[0.98] transition-all group text-center text-center text-center text-center">
+                                <i data-lucide="plus" class="w-5 h-5 group-hover:scale-110 transition-transform text-center text-center text-center"></i>
+                                <span class="text-base text-center">開始建立第一個習慣吧！</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. 我的習慣清單頁 -->
+        <section v-if="activeTab === 'habits'" class="animate-slide-up h-full flex flex-col px-5 py-5 overflow-hidden text-left">
+            <div v-if="habits.length === 0" class="flex-1 flex flex-col items-center justify-center text-center animate-slide-up text-center text-center">
+                <div class="w-32 h-32 bg-white/30 rounded-full flex items-center justify-center mb-8 shadow-inner border border-white/20 mx-auto text-center">
+                    <i data-lucide="clipboard-list" class="w-16 h-16 text-primary-brand opacity-40 text-center text-center"></i>
+                </div>
+                <h3 class="text-2xl font-black text-accent-purple mb-3 text-center text-center">還沒有建立習慣嗎？</h3>
+                <p class="text-accent-purple/40 font-bold mb-10 max-w-[240px] mx-auto text-center">從一個小小的目標開始，開啟您的治癒養成之旅。</p>
+                <button @click="openHabitModal()" 
+                        class="px-10 h-16 bg-primary-brand rounded-[20px] text-white font-black text-xl shadow-dreamy active:scale-95 transition-all flex items-center gap-3 mx-auto">
+                    <i data-lucide="plus" class="w-6 h-6 text-center"></i>
+                    新增目標
+                </button>
+            </div>
+            <div v-else class="flex-1 custom-scroll space-y-4 pb-24 text-left">
+                <transition-group name="list" tag="div" class="space-y-4 text-left text-left text-left">
+                    <div v-for="habit in sortedHabits" :key="habit.id" class="swipe-item-container shadow-dreamy text-left" :class="habit.isActive === false ? 'opacity-60 grayscale-[50%]' : ''">
+                        <div class="swipe-content glass-card p-6 flex flex-col gap-6 text-left" :style="{ transform: swipedId === habit.id ? 'translateX(-80px)' : 'translateX(0)' }" @touchstart="handleTouchStart($event, habit.id)" @touchend="handleTouchEnd($event, habit.id)">
+                            <div class="flex justify-between items-start text-left text-left">
+                                <div class="flex items-center gap-4 min-w-0 flex-1 text-left text-left">
+                                    <div :class="['w-14 h-14 rounded-[16px] flex-shrink-0 flex items-center justify-center text-white shadow-sm text-center text-center', habit.color]"><i :data-lucide="habit.icon" class="w-8 h-8 text-center text-center"></i></div>
+                                    <div class="min-w-0 flex-1 text-left text-left">
+                                        <h3 class="font-black text-xl text-accent-purple truncate text-left">{{ habit.name }}</h3>
+                                        <p class="text-xs text-accent-purple/40 font-bold mt-1 text-left">每週: {{ habit.selectedDays.map(d => weekLabelsShort[d]).join(', ') }}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-4 text-center">
+                                    <div @click.stop="toggleHabitActive(habit)" class="switch-track text-center" :class="habit.isActive !== false ? 'bg-success-mint' : 'bg-gray-200'"><div class="switch-thumb text-center" :class="habit.isActive !== false ? 'translate-x-5' : 'left-0.5 text-center'"></div></div>
+                                    <button @click.stop="openHabitModal(habit)" class="w-10 h-10 bg-gray-50 rounded-[16px] flex items-center justify-center text-primary-brand active:scale-90 transition-all text-center text-center"><i data-lucide="edit-3" class="w-6 h-6 text-center text-center"></i></button>
                                 </div>
                             </div>
+                        </div>
+                        <div class="absolute right-0 top-0 bottom-0 w-20 flex items-center justify-center text-white cursor-pointer text-center text-center text-center" @click="deleteHabit(habit.id)"><i data-lucide="trash-2" class="w-7 h-7 mx-auto text-center"></i></div>
+                    </div>
+                </transition-group>
+            </div>
+        </section>
+
+        <!-- 2. 統計數據頁 (圖表回歸) -->
+        <section v-if="activeTab === 'stats'" class="animate-slide-up h-full flex flex-col px-5 py-5 overflow-hidden text-left text-left text-left text-left">
+            <div class="flex-1 custom-scroll space-y-6 pb-24 text-left">
+                <div class="grid grid-cols-4 gap-2.5 text-center text-center text-center text-center text-center text-center text-center">
+                    <div v-for="stat in topStats" :key="stat.label" class="glass-card p-4 flex flex-col items-center justify-center space-y-1 text-center text-center text-center text-center text-center">
+                        <span class="text-[9px] font-black text-accent-purple/40 uppercase tracking-tighter text-center">{{ stat.label }}</span>
+                        <span class="text-xl font-black text-accent-purple text-center">{{ stat.value }}</span>
+                    </div>
+                </div>
+
+                <!-- 週分析圖表 -->
+                <div class="glass-card p-6 space-y-6 text-left">
+                    <div class="flex flex-col gap-5 text-left text-left">
+                        <div class="flex justify-between items-start text-left text-left">
+                            <h3 class="text-lg font-black text-accent-purple">週趨勢分析</h3>
+                            <div class="px-2.5 py-1 rounded-full bg-success-mint/10 border border-success-mint/20 text-[9px] font-black text-success-mint text-center text-center">達成率 %</div>
+                        </div>
+                        <div class="flex p-1 bg-primary-brand/5 rounded-full border border-primary-brand/10 text-center text-center">
+                            <button v-for="filter in [{id:'all',label:'所有'},{id:'seven',label:'近七週'},{id:'month',label:'近一月'}]" 
+                            :key="filter.id" @click="statsFilter = filter.id"
+                            :class="['flex-1 py-2 text-[11px] font-black rounded-full transition-all text-center', statsFilter === filter.id ? 'bg-primary-brand text-white shadow-sm text-center' : 'text-accent-purple/40 text-center']">
+                                {{ filter.label }}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto no-scrollbar pb-2 text-center text-center">
+                        <div class="flex items-end justify-start gap-4 min-w-full px-2 h-44 text-center">
+                            <div v-for="(w, idx) in filteredWeeklyData" :key="idx" class="flex flex-col items-center gap-3 w-8 flex-shrink-0 text-center text-center">
+                                <div class="w-full bg-primary-brand/10 rounded-full relative overflow-hidden flex flex-col justify-end text-center" style="height: 140px;">
+                                    <div class="w-full bg-primary-brand transition-all duration-1000 rounded-t-full shadow-lg text-center" :style="{ height: w.rate + '%' }">
+                                         <div class="w-full h-full bg-gradient-to-t from-transparent to-white/30 opacity-40 text-center"></div>
+                                    </div>
+                                </div>
+                                <span class="text-[9px] font-black text-accent-purple/30 whitespace-nowrap text-center">{{ w.label }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 月排行 -->
+                <div class="glass-card p-6 space-y-5 text-left text-left text-left">
+                    <h3 class="text-lg font-black text-accent-purple">本月排行</h3>
+                    <div class="space-y-3">
+                        <div v-for="(item, index) in monthlyRanking" :key="item.id" class="flex items-center justify-between p-4 rounded-[16px] bg-white/40 border border-white/40 shadow-sm text-left">
+                            <div class="flex items-center gap-4 text-left">
+                                <div class="w-6 h-6 flex items-center justify-center rounded-full bg-accent-purple text-white text-[10px] font-black text-center text-center">{{ index + 1 }}</div>
+                                <div :class="['w-10 h-10 rounded-xl flex items-center justify-center text-white text-center text-center', item.color]"><i :data-lucide="item.icon" class="w-6 h-6 text-center text-center"></i></div>
+                                <span class="font-black text-accent-purple text-base text-left">{{ item.name }}</span>
+                            </div>
+                            <div class="flex items-baseline gap-1 text-center text-center"><span class="text-lg font-black text-primary-brand">{{ item.count }}</span><span class="text-[10px] font-black text-accent-purple/30">次</span></div>
                         </div>
                     </div>
                 </div>
@@ -489,48 +406,50 @@
     </main>
 
     <!-- 底部導覽列 -->
-    <nav class="fixed bottom-0 left-0 right-0 h-[84px] glass-surface z-50 flex items-center shadow-nav-dock">
-        <div class="w-full flex justify-around items-center px-4 relative">
-            <button v-for="tab in ['home', 'checkin']" @click="activeTab = tab" :class="['flex flex-col items-center justify-center gap-1 transition-all flex-1 py-2', activeTab === tab ? 'text-accent-purple scale-[1.2] font-black' : 'text-white/85']"><i :data-lucide="tab === 'home' ? 'home' : 'history'" class="w-[22px] h-[22px]"></i><span class="text-[12px] uppercase font-black">{{ tabTitlesShort[tab] }}</span></button>
-            <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center -mt-10"><button @click="openHabitModal()" class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-tr from-primary-brand to-[#C4B5FD] text-white active:scale-90 transition-all shadow-dreamy shadow-[inset_0_2px_4px_rgba(255,255,255,0.5),0_6px_15px_rgba(76,29,149,0.3)]"><i data-lucide="plus" class="w-8 h-8 drop-shadow-sm"></i></button></div>
-            <button v-for="tab in ['habits', 'stats']" @click="activeTab = tab" :class="['flex flex-col items-center justify-center gap-1 transition-all flex-1 py-2', activeTab === tab ? 'text-accent-purple scale-[1.2] font-black' : 'text-white/85']"><i :data-lucide="tab === 'habits' ? 'layers' : 'line-chart'" class="w-[22px] h-[22px]"></i><span class="text-[12px] uppercase font-black">{{ tabTitlesShort[tab] }}</span></button>
+    <nav class="h-[84px] glass-surface flex items-center shadow-nav-dock flex-shrink-0 z-50 text-left text-left text-left">
+        <div class="w-full flex justify-around items-center px-6 relative text-center text-center text-center text-center text-center">
+            <button v-for="tab in ['home', 'habits', 'stats']" :key="tab" @click="activeTab = tab; isHistoryMonthView = false" 
+                    :class="['flex flex-col items-center justify-center gap-1.5 transition-all flex-1 py-3 text-center text-center text-center text-center text-center', activeTab === tab ? 'text-accent-purple scale-110 font-black' : 'text-white/70']">
+                <i :data-lucide="tabIcons[tab]" class="w-6.5 h-6.5 text-center text-center text-center text-center"></i>
+                <span class="text-[12px] uppercase font-black tracking-wider text-center text-center text-center">{{ tab === 'habits' ? '清單' : tabTitlesShort[tab] }}</span>
+            </button>
         </div>
     </nav>
 
-    <!-- 新增習慣視窗 -->
-    <div v-if="habitModal.show" class="fixed inset-0 bg-accent-purple/20 backdrop-blur-md z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4" @click.self="habitModal.show = false">
-        <div class="bg-white w-full max-w-md rounded-t-[16px] sm:rounded-habit flex flex-col h-[85vh] overflow-hidden shadow-2xl animate-slide-up relative text-left">
-            <div class="p-6 space-y-6 flex-1 overflow-y-auto pb-48 px-4 text-left">
-                <h3 class="text-[20px] font-black text-accent-purple text-center tracking-tight mt-4">開始新的挑戰</h3>
-                <div class="space-y-6">
-                    <div class="bg-primary-brand/5 p-5 rounded-habit border-2 border-primary-brand/10 space-y-4 shadow-inner">
-                        <div class="flex justify-between items-center px-1"><label class="text-base font-black text-accent-purple">習慣名稱 <span class="text-streak-coral font-black">*</span></label><span v-if="habitErrors.name" class="text-xs font-bold text-streak-coral animate-pulse"><i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> 必填</span></div>
-                        <input v-model="habitModal.data.name" type="text" placeholder="你想養成的習慣..." class="w-full duo-input px-4 font-black">
-                        <div class="space-y-3 pt-1 text-left"><p class="text-[11px] font-black text-accent-purple/40 uppercase px-1">快速啟動</p><div class="flex gap-2 overflow-x-auto py-2 snap-x scroll-smooth px-1"><button v-for="suggest in suggestionHabits" :key="suggest" @click="selectSuggestion(suggest)" class="px-5 py-2.5 rounded-[12px] text-[15px] font-bold text-accent-purple/70 bg-white border border-primary-brand/10 shadow-sm active:scale-95 transition-all snap-start whitespace-nowrap min-h-[40px]">{{ suggest }}</button></div></div>
-                    </div>
-                    <div class="px-1 text-left"><label class="text-base font-black text-accent-purple block mb-2">主題風格</label><div class="theme-scroll-area"><div v-for="theme in themeLibrary" :key="theme.id" @click="applyTheme(theme)" :class="['theme-chip', theme.color, habitModal.data.themeId === theme.id ? 'active' : 'opacity-40 grayscale-[20%]']"><i :data-lucide="theme.icon" class="w-6 h-6"></i></div></div></div>
-                    <div class="px-1 text-left"><div class="flex justify-between items-center mb-4"><label class="text-base font-black text-accent-purple font-black">每週排程</label><button @click="selectWorkdays" class="duo-btn-primary h-10 px-6 bg-primary-brand text-[13px] text-white shadow-sm flex items-center border-none">工作日</button></div><div class="grid grid-cols-7 gap-2"><button v-for="(label, index) in weekLabelsShort" :key="index" @click="toggleDayInModal(index)" :class="['h-11 rounded-[12px] font-black text-[15px] border-2 shadow-sm transition-all', habitModal.data.selectedDays.includes(index) ? 'bg-primary-brand border-primary-brand text-white' : 'bg-gray-50 border-gray-100 text-gray-300']">{{ label }}</button></div></div>
-                    <div class="px-1 pb-4 text-left"><label class="text-base font-black text-accent-purple block mb-2">起始日</label><input v-model="habitModal.data.createdAtStr" type="date" class="w-full duo-input px-4 font-black"></div>
-                </div>
+    <!-- 打卡心情日記彈窗 -->
+    <div v-if="logModal.show" class="fixed inset-0 bg-black/40 backdrop-blur-md z-[130] flex items-center justify-center p-6 text-left text-left" @click.self="logModal.show = false">
+        <div class="bg-white w-full max-sm rounded-[24px] p-8 space-y-8 shadow-2xl animate-slide-up relative text-center">
+            <button @click.stop="logModal.show = false" class="absolute top-6 right-6 text-gray-300 hover:text-accent-purple transition-colors text-center text-center"><i data-lucide="x" class="w-7 h-7 text-center text-center text-center"></i></button>
+            <div class="flex flex-col items-center gap-4 text-center">
+                <div :class="['w-20 h-20 rounded-[20px] flex items-center justify-center text-white shadow-lg shadow-dreamy text-center text-center text-center', logModal.habit?.color]"><i :data-lucide="logModal.habit?.icon || 'check'" class="w-10 h-10 text-center text-center"></i></div>
+                <h3 class="text-[28px] font-black text-accent-purple tracking-tight text-center">打卡成功！</h3>
             </div>
-            <div class="modal-bottom flex gap-4 bg-white/95 backdrop-blur-sm px-4 pt-4 pb-8"><button @click="habitModal.show = false" class="flex-1 h-11 bg-gray-100 rounded-habit font-black text-gray-400 text-base active:scale-95 transition-transform">取消</button><button @click="saveHabit" class="flex-1 h-11 bg-primary-brand rounded-habit font-black text-white text-base shadow-dreamy">確認新增</button></div>
+            <textarea v-model="logModal.note" rows="3" placeholder="紀錄此刻心情..." class="w-full p-5 bg-gray-50 rounded-[16px] text-accent-purple font-bold text-sm outline-none resize-none shadow-inner text-left text-left"></textarea>
+            <button @click.stop="saveCheckinLog" class="w-full h-14 bg-primary-brand rounded-[16px] font-black text-white text-lg shadow-dreamy active:scale-95 transition-all text-center">儲存心得</button>
         </div>
     </div>
 
-    <!-- 打卡回饋視窗 -->
-    <div v-if="logModal.show" class="fixed inset-0 bg-black/25 backdrop-blur-lg z-[120] flex items-center justify-center p-6" @click.self="logModal.show = false">
-        <div class="bg-white w-full max-sm rounded-habit p-8 space-y-6 shadow-2xl animate-slide-up relative text-center border-none">
-            <button @click="logModal.show = false" class="absolute top-6 right-6 text-gray-300 hover:text-accent-purple transition-colors touch-target"><i data-lucide="x" class="w-7 h-7"></i></button>
-            <div class="pt-4 flex flex-col items-center">
-                <div :class="['w-16 h-16 rounded-[12px] flex items-center justify-center text-white shadow-lg mb-4 shadow-dreamy', logModal.habit.color]"><i :data-lucide="logModal.habit.icon" class="w-8 h-8"></i></div>
-                <h3 class="text-[28px] font-black text-accent-purple tracking-tight mb-1">打卡成功！</h3>
-                <p class="text-sm font-bold text-primary-brand uppercase tracking-widest mb-4 opacity-70">{{ logModal.habit.name }}</p>
+    <!-- 新增習慣彈窗 -->
+    <div v-if="habitModal.show" class="fixed inset-0 bg-black/40 backdrop-blur-lg z-[120] flex items-end sm:items-center justify-center p-0 sm:p-6 text-left text-left text-left" @click.self="habitModal.show = false">
+        <div class="bg-white w-full max-w-md rounded-t-[24px] sm:rounded-[24px] flex flex-col h-[90vh] shadow-2xl animate-slide-up relative text-left">
+            <div class="flex-1 custom-scroll p-8 space-y-8 overflow-y-auto text-left text-left text-left">
+                <h3 class="text-2xl font-black text-accent-purple tracking-tight text-center text-center">開始新的挑戰</h3>
+                <div class="space-y-8 pb-10 text-left">
+                    <div class="space-y-4 text-left">
+                        <div class="flex justify-between items-center px-1 text-left"><label class="text-sm font-black text-accent-purple/60 uppercase">習慣名稱</label><span v-if="habitErrors.name" class="text-xs font-bold text-streak-coral animate-pulse text-center text-center">必填內容</span></div>
+                        <input v-model="habitModal.data.name" type="text" placeholder="你想養成的習慣..." class="w-full duo-input px-6 h-14 text-lg font-black border-gray-100 focus:border-primary-brand text-left text-left text-left" @input="handleSmartHint">
+                        <div class="flex gap-2 overflow-x-auto py-2 snap-x scroll-smooth no-scrollbar text-left text-left text-left"><button v-for="suggest in suggestionHabits" :key="suggest" @click.stop="selectSuggestion(suggest)" class="px-5 py-2.5 rounded-full text-xs font-black text-accent-purple/60 bg-gray-50 border border-transparent hover:border-primary-brand/30 hover:bg-white active:scale-95 snap-start whitespace-nowrap text-center text-center">{{ suggest }}</button></div>
+                    </div>
+                    <div class="space-y-4 text-left text-left">
+                        <label class="text-sm font-black text-accent-purple/60 uppercase px-1 text-left text-left">主題風格</label>
+                        <div class="grid grid-cols-5 gap-4 text-center">
+                            <div v-for="theme in themeLibrary" :key="theme.id" @click.stop="applyTheme(theme)" :class="['flex-shrink-0 rounded-2xl flex items-center justify-center text-white transition-all cursor-pointer aspect-square text-center', theme.color, habitModal.data.themeId === theme.id ? 'ring-4 ring-primary-brand ring-offset-4 scale-110' : 'opacity-40']"><i :data-lucide="theme.icon" class="w-7 h-7 text-center"></i></div>
+                        </div>
+                    </div>
+                    <div class="space-y-4 text-left text-left text-left"><div class="flex justify-between items-center px-1 text-left text-left text-left text-left"><label class="text-sm font-black text-accent-purple/60 uppercase text-left text-left">每週排程</label><button @click.stop="selectWorkdays" class="text-xs font-black text-primary-brand bg-primary-brand/10 px-4 py-1.5 rounded-full active:scale-95 text-center text-center text-center">工作日模式</button></div><div class="grid grid-cols-7 gap-2 text-center text-center text-center text-center text-center"><button v-for="(label, index) in weekLabelsShort" :key="index" @click.stop="toggleDayInModal(index)" :class="['h-11 rounded-xl font-black text-sm border-2 transition-all text-center', habitModal.data.selectedDays.includes(index) ? 'bg-primary-brand border-primary-brand text-white' : 'bg-gray-50 border-transparent text-gray-300 text-center']">{{ label }}</button></div></div>
+                </div>
             </div>
-            <div class="space-y-2 text-left">
-                <label class="text-[15px] font-black text-accent-purple tracking-wider px-1 opacity-60 uppercase text-left">今天的心情日誌</label>
-                <textarea v-model="logModal.note" rows="3" placeholder="此刻的心情是..." class="w-full p-4 duo-input rounded-habit h-auto min-h-[100px] font-bold resize-none bg-gray-50 text-[16px] shadow-inner leading-relaxed"></textarea>
-            </div>
-            <button @click="saveCheckinLog" class="w-full h-12 bg-primary-brand rounded-habit font-black text-white text-lg shadow-dreamy active:scale-95 transition-all">儲存心得</button>
+            <div class="p-6 bg-white/80 backdrop-blur-md border-t border-gray-100 flex gap-4 rounded-b-[24px] text-center text-center text-center"><button @click="habitModal.show = false" class="flex-1 h-14 bg-gray-100 rounded-[16px] font-black text-gray-400 text-lg active:scale-95 text-center text-center">取消</button><button @click="saveHabit" class="flex-1 h-14 bg-primary-brand rounded-[16px] font-black text-white text-lg shadow-dreamy active:scale-95 text-center text-center">{{ habitModal.isEdit ? '儲存修改' : '確認建立' }}</button></div>
         </div>
     </div>
 </div>
@@ -541,8 +460,9 @@ const { createApp, ref, computed, onMounted, watch, nextTick } = Vue;
 createApp({
     setup() {
         const weekLabelsShort = ['日', '一', '二', '三', '四', '五', '六'];
-        const tabTitlesShort = { home: 'HabitDuo', checkin: '歷程', habits: '清單', stats: '統計' };
-        const suggestionHabits = ['每日喝水', '睡前閱讀', '正念冥想', '早起運動', '補充維他命', '心情日記'];
+        const tabTitlesShort = { home: 'HabitDuo', habits: '我的習慣列表', stats: '統計數據' };
+        const tabIcons = { home: 'home', habits: 'layers', stats: 'line-chart' };
+        const suggestionHabits = ['每日喝水', '睡前閱讀', '正念冥想', '早起運動', '補充維命', '心情日記'];
         
         const themeLibrary = [
             { id: 'health', color: 'bg-success-mint', icon: 'zap', keywords: ['跑','運','健','泳','瑜','散'] },
@@ -552,229 +472,196 @@ createApp({
             { id: 'star', color: 'bg-gold-shine', icon: 'star', keywords: ['目','計','成','存','挑'] }
         ];
 
-        const activeTab = ref('home');
         const habits = ref(JSON.parse(localStorage.getItem('habits')) || []);
         const checkins = ref(JSON.parse(localStorage.getItem('checkins')) || {}); 
-        const selectedDate = ref(new Date());
-        const weekPivotDate = ref(new Date()); 
-        const statsViewDate = ref(new Date()); 
-        const habitModal = ref({ show: false, isEdit: false, data: {} });
-        const logModal = ref({ show: false, habit: {}, note: '' });
-        const swipedId = ref(null);
-        const isAnimating = ref(false); 
-        const showConfetti = ref(false);
-        const confettiList = ref([]);
-        const habitErrors = ref({ name: false });
-        const isHistoryMonthView = ref(false);
-        let touchStartX = 0;
+        const statsFilter = ref('seven');
 
-        // 工具函式
-        const getFormattedDate = (date) => {
-            const d = new Date(date);
-            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-        };
-        const formatDateFull = (date) => `${date.getMonth() + 1}月${date.getDate()}日 ${['週日','週一','週二','週三','週四','週五','週六'][date.getDay()]}`;
-        const getWeekNumber = (d) => {
-            const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-            date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
-            return Math.ceil((((date - new Date(Date.UTC(date.getUTCFullYear(), 0, 1))) / 86400000) + 1) / 7);
-        };
-        const hasLog = (date) => Object.values(checkins.value[getFormattedDate(date)] || {}).some(l => l.done);
-        
-        // 修復：回報錯誤中的 getMood 函式
-        const getMood = (id) => {
-            const dateStr = getFormattedDate(selectedDate.value);
-            return checkins.value[dateStr]?.[id]?.note || '';
-        };
-
-        // 統計邏輯
         const totalCheckinCount = computed(() => {
             let total = 0;
-            Object.values(checkins.value).forEach(dayLogs => { total += Object.values(dayLogs).filter(l => l.done).length; });
+            Object.values(checkins.value).forEach(v => { 
+                Object.values(v).forEach(l => { if(l.done) total++; });
+            });
             return total;
-        });
-
-        const longestStreak = computed(() => {
-            let max = 0; let current = 0;
-            const checkinDates = Object.keys(checkins.value).filter(d => Object.values(checkins.value[d]).some(l => l.done)).sort();
-            if (checkinDates.length === 0) return 0;
-            for(let i=0; i<checkinDates.length; i++) {
-                if(i > 0) {
-                    const prev = new Date(checkinDates[i-1]);
-                    const curr = new Date(checkinDates[i]);
-                    const diff = (new Date(curr) - new Date(prev)) / 86400000;
-                    if(diff === 1) current++; else current = 1;
-                } else current = 1;
-                if(current > max) max = current;
-            }
-            return max;
-        });
-
-        const topStats = computed(() => [
-            { label: '項目數', value: habits.value.length },
-            { label: '記錄天數', value: Object.keys(checkins.value).length },
-            { label: '達成次數', value: totalCheckinCount.value },
-            { label: '最長連續', value: longestStreak.value }
-        ]);
-
-        const daysToEndOfMonth = computed(() => {
-            const now = new Date();
-            const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-            return lastDay - now.getDate();
         });
 
         const birdLevel = computed(() => totalCheckinCount.value >= 50 ? 2 : totalCheckinCount.value >= 10 ? 1 : 0);
         const evolutionRequirement = computed(() => birdLevel.value === 0 ? 10 : birdLevel.value === 1 ? 50 : 100);
 
-        const mascotGrowthSummary = computed(() => {
-            if (totalCheckinCount.value === 0) return "雲端計畫剛啟動，多餵我一點能量吧！";
-            return `已累計達成 ${totalCheckinCount.value} 次打卡，持續在雲端進化中！`;
+        const activeTab = ref('home');
+        const selectedDate = ref(new Date());
+        const weekPivotDate = ref(new Date()); 
+        const statsViewDate = ref(new Date()); 
+        const isHistoryMonthView = ref(false);
+        const habitModal = ref({ show: false, isEdit: false, data: {} });
+        const logModal = ref({ show: false, habit: null, note: '' });
+        const swipedId = ref(null);
+        const isAnimating = ref(false); 
+        const confettiList = ref([]);
+        const habitErrors = ref({ name: false });
+        let touchStartX = 0;
+
+        const getFormattedDate = (date) => {
+            const d = new Date(date);
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        };
+        const isSameDay = (d1, d2) => getFormattedDate(d1) === getFormattedDate(d2);
+        const isChecked = (id) => checkins.value[getFormattedDate(selectedDate.value)]?.[id]?.done || false;
+        const hasLog = (date) => checkins.value[getFormattedDate(date)] && Object.values(checkins.value[getFormattedDate(date)]).some(l => l.done);
+        const getMood = (id) => checkins.value[getFormattedDate(selectedDate.value)]?.[id]?.note || '';
+        
+        const mascotGreeting = computed(() => isAnimating.value ? "注入能量成功！" : (birdLevel.value === 0 ? "嘿，快來孵化我吧！" : "今天的目標也要達成喔！"));
+
+        const habitsForSelectedDay = computed(() => {
+            const dayIdx = selectedDate.value.getDay();
+            return habits.value.filter(h => h.selectedDays.includes(dayIdx) && h.isActive !== false);
         });
 
-        const weeklyStatsData = computed(() => {
-            const weeks = [];
-            const now = new Date();
-            for (let i = 6; i >= 0; i--) {
-                const targetDate = new Date(now); targetDate.setDate(now.getDate() - (i * 7));
-                const weekNum = getWeekNumber(targetDate);
-                const start = new Date(targetDate); start.setDate(targetDate.getDate() - targetDate.getDay());
-                const end = new Date(start); end.setDate(start.getDate() + 6);
-                let weekCount = 0;
-                Object.entries(checkins.value).forEach(([dateStr, logs]) => {
-                    const d = new Date(dateStr);
-                    if (d >= start && d <= end) weekCount += Object.values(logs).filter(l => l.done).length;
-                });
-                weeks.push({ label: `第${weekNum}週`, count: weekCount });
+        const dayDoneCount = computed(() => habitsForSelectedDay.value.filter(h => isChecked(h.id)).length);
+
+        const filteredWeeklyData = computed(() => {
+            const data = []; const now = new Date();
+            let numWeeks = statsFilter.value === 'month' ? 4 : statsFilter.value === 'all' ? 12 : 7;
+            for (let i = numWeeks - 1; i >= 0; i--) {
+                const wEnd = new Date(now); wEnd.setDate(now.getDate() - (i * 7));
+                const wStart = new Date(wEnd); wStart.setDate(wEnd.getDate() - 6);
+                let count = 0; let possible = 0;
+                for (let d = 0; d < 7; d++) {
+                    const curr = new Date(wStart); curr.setDate(wStart.getDate() + d);
+                    const ds = getFormattedDate(curr); const dow = curr.getDay();
+                    habits.value.forEach(h => { if (h.selectedDays.includes(dow) && h.isActive !== false) { possible++; if (checkins.value[ds]?.[h.id]?.done) count++; }});
+                }
+                data.push({ label: i === 0 ? '本週' : `${i}w`, rate: possible > 0 ? (count / possible) * 100 : 0 });
             }
-            return weeks;
+            return data;
         });
 
-        const weeklyMax = computed(() => Math.max(...weeklyStatsData.value.map(w => w.count), 5));
-
-        const todayFormattedFull = computed(() => {
+        const monthlyRanking = computed(() => {
             const now = new Date();
-            return `${now.getMonth() + 1}/${now.getDate()} ${weekLabelsShort[now.getDay()]}`;
-        });
-
-        const getMonotonePath = (data, isArea = false) => {
-            if (data.length === 0) return '';
-            const points = data.map((d, i) => ({ x: (i / 6) * 100, y: 100 - (d.count / weeklyMax.value) * 85 }));
-            let path = `M ${points[0].x},${points[0].y}`;
-            for (let i = 0; i < points.length - 1; i++) {
-                const p0 = points[i]; const p1 = points[i + 1];
-                const cp1x = p0.x + (p1.x - p0.x) / 2;
-                path += ` C ${cp1x},${p0.y} ${cp1x},${p1.y} ${p1.x},${p1.y}`;
-            }
-            if (isArea) path += ` L 100,100 L 0,100 Z`;
-            return path;
-        };
-
-        const moodLogsByDate = computed(() => {
-            const groups = {};
-            Object.entries(checkins.value).forEach(([dateStr, habitsData]) => {
-                Object.entries(habitsData).forEach(([habitId, data]) => {
-                    if (data.note && data.note.trim() !== '') {
-                        const habit = habits.value.find(h => h.id.toString() === habitId.toString());
-                        if (habit) {
-                            if (!groups[dateStr]) {
-                                const d = new Date(dateStr);
-                                groups[dateStr] = { dateStr, dateFormatted: `${d.getMonth()+1}/${d.getDate()} (${weekLabelsShort[d.getDay()]})`, logs: [] };
-                            }
-                            groups[dateStr].logs.push({ habitName: habit.name, icon: habit.icon, color: habit.color, note: data.note });
-                        }
-                    }
+            return habits.value.map(h => {
+                let count = 0;
+                Object.entries(checkins.value).forEach(([ds, logs]) => {
+                    const d = new Date(ds);
+                    if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear() && logs[h.id]?.done) count++;
                 });
-            });
-            return Object.values(groups).sort((a, b) => new Date(b.dateStr) - new Date(a.dateStr));
+                return { ...h, count };
+            }).filter(h => h.count > 0).sort((a,b) => b.count - a.count);
         });
-
-        const handleTouchStart = (e, id) => { touchStartX = e.touches[0].clientX; };
-        const handleTouchEnd = (e, id) => {
-            const diff = touchStartX - e.changedTouches[0].clientX;
-            if (diff > 50) swipedId.value = id; 
-            else if (diff < -50) swipedId.value = null; 
-        };
-
-        const triggerConfetti = () => {
-            const colors = ['#A78BFA', '#6EE7B7', '#FDA4AF', '#FFFFFF', '#A5B4FC', '#FBBF24'];
-            const list = [];
-            for (let i = 0; i < 40; i++) { list.push({ id: i, x: Math.random() * 100, color: colors[Math.floor(Math.random() * colors.length)], delay: Math.random() * 0.5, size: Math.random() * 10 + 5 }); }
-            confettiList.value = list; showConfetti.value = true;
-            setTimeout(() => { showConfetti.value = false; confettiList.value = []; }, 2500);
-        };
-
-        const handleCheckinFeedback = (h) => { 
-            const ds = getFormattedDate(selectedDate.value); if(!checkins.value[ds]) checkins.value[ds] = {}; if(!checkins.value[ds][h.id]) checkins.value[ds][h.id] = {done:false, note:''}; 
-            checkins.value[ds][h.id].done = !checkins.value[ds][h.id].done; 
-            if(checkins.value[ds][h.id].done){ triggerConfetti(); logModal.value = {show:true, habit:h, note: checkins.value[ds][h.id].note}; } 
-        };
 
         const openHabitModal = (habit = null) => {
             swipedId.value = null; habitErrors.value.name = false;
-            if (habit) habitModal.value = { show: true, isEdit: true, data: { ...JSON.parse(JSON.stringify(habit)), createdAtStr: getFormattedDate(new Date(habit.createdAt)) } };
-            else habitModal.value = { show: true, isEdit: false, data: { name: '', selectedDays: [0,1,2,3,4,5,6], themeId: 'wisdom', color: 'bg-primary-brand', icon: 'book', createdAtStr: getFormattedDate(new Date()) } };
+            if (habit) habitModal.value = { show: true, isEdit: true, data: JSON.parse(JSON.stringify(habit)) };
+            else habitModal.value = { show: true, isEdit: false, data: { name: '', selectedDays: [0,1,2,3,4,5,6], themeId: 'wisdom', color: 'bg-primary-brand', icon: 'book', createdAt: Date.now(), isActive: true } };
             nextTick(() => { if (window.lucide) lucide.createIcons(); });
         };
 
-        const saveHabit = () => { 
-            if(!habitModal.value.data.name){habitErrors.value.name=true;return;} 
-            const h = {...habitModal.value.data, createdAt: new Date(habitModal.value.data.createdAtStr).getTime()}; 
-            if(habitModal.value.isEdit){const i=habits.value.findIndex(x=>x.id===h.id);if(i!==-1)habits.value[i]=h;}
-            else{h.id=Date.now();habits.value.push(h);} 
-            habitModal.value.show=false;
+        const saveHabit = () => {
+            if(!habitModal.value.data.name){ habitErrors.value.name = true; return; }
+            if(habitModal.value.isEdit){
+                const idx = habits.value.findIndex(h => h.id === habitModal.value.data.id);
+                if(idx !== -1) habits.value[idx] = habitModal.value.data;
+            } else {
+                habits.value.push({ ...habitModal.value.data, id: Date.now() });
+            }
+            habitModal.value.show = false;
         };
 
-        const handleSmartHint = () => { 
-            const n = habitModal.value.data.name; if(!n) return; habitErrors.value.name=false; 
-            for(const t of themeLibrary){if(t.keywords?.some(k=>n.includes(k))){habitModal.value.data.themeId=t.id;habitModal.value.data.color=t.color;habitModal.value.data.icon=t.icon;break;}}
+        const handleSmartHint = () => {
+            const n = habitModal.value.data.name; if(!n) return; habitErrors.value.name=false;
+            const found = themeLibrary.find(t => t.keywords?.some(k => n.includes(k)));
+            if(found){ habitModal.value.data.themeId=found.id; habitModal.value.data.color=found.color; habitModal.value.data.icon=found.icon; }
+            nextTick(() => { if (window.lucide) lucide.createIcons(); });
         };
 
-        const selectSuggestion = (n) => { habitModal.value.data.name = n; handleSmartHint(); };
+        const selectSuggestion = (n) => {
+            habitModal.value.data.name = n;
+            handleSmartHint();
+        };
+
+        const handleCheckinFeedback = (habit, event) => {
+            const ds = getFormattedDate(selectedDate.value);
+            if(!checkins.value[ds]) checkins.value[ds] = {};
+            if(!checkins.value[ds][habit.id]) checkins.value[ds][habit.id] = {done:false, note:''};
+            const current = checkins.value[ds][habit.id].done;
+            checkins.value[ds][habit.id].done = !current;
+            if(!current){
+                const colors = ['#A78BFA', '#6EE7B7', '#FDA4AF', '#FFFFFF', '#FBBF24'];
+                for (let i = 0; i < 30; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const dist = Math.random() * 150 + 50;
+                    confettiList.value.push({
+                        id: Math.random(), originX: event.clientX, originY: event.clientY,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        size: Math.random() * 8 + 4, tx: Math.cos(angle) * dist, ty: Math.sin(angle) * dist - 50, rot: Math.random() * 360
+                    });
+                }
+                setTimeout(() => { confettiList.value = confettiList.value.slice(30); }, 2000);
+                if(isSameDay(new Date(), selectedDate.value)) { isAnimating.value = true; setTimeout(() => isAnimating.value = false, 600); }
+                logModal.value = { show: true, habit: habit, note: checkins.value[ds][habit.id].note || '' };
+            }
+        };
+
+        const saveCheckinLog = () => {
+            const ds = getFormattedDate(selectedDate.value);
+            if(logModal.value.habit?.id) {
+                if(!checkins.value[ds]) checkins.value[ds] = {};
+                checkins.value[ds][logModal.value.habit.id] = { done: true, note: logModal.value.note };
+            }
+            logModal.value.show = false;
+        };
 
         onMounted(() => { if (window.lucide) lucide.createIcons(); });
-        watch([activeTab, habits, habitModal, logModal, selectedDate, swipedId, isHistoryMonthView, statsViewDate], () => { nextTick(() => { if (window.lucide) lucide.createIcons(); }); }, { deep: true });
-        watch(habits, (v) => localStorage.setItem('habits', JSON.stringify(v)), { deep: true });
-        watch(checkins, (v) => localStorage.setItem('checkins', JSON.stringify(v)), { deep: true });
+        watch([activeTab, habits, checkins, selectedDate, isHistoryMonthView], () => { 
+            nextTick(() => { if (window.lucide) lucide.createIcons(); }); 
+            localStorage.setItem('habits', JSON.stringify(habits.value));
+            localStorage.setItem('checkins', JSON.stringify(checkins.value));
+        }, { deep: true });
 
         return {
-            activeTab, habits, checkins, selectedDate, weekPivotDate, statsViewDate, habitModal, logModal, swipedId, isAnimating, showConfetti, confettiList, habitErrors, isHistoryMonthView,
-            tabTitlesShort, todayFormattedFull, themeLibrary, suggestionHabits, topStats, daysToEndOfMonth, mascotGrowthSummary, weeklyStatsData, weeklyMax, smoothWavePath: computed(() => getMonotonePath(weeklyStatsData.value)), smoothWaveAreaPath: computed(() => getMonotonePath(weeklyStatsData.value, true)), moodLogsByDate,
-            topHabitsByMonth: computed(() => {
-                const counts = {}; const vm = statsViewDate.value.getMonth(); const vy = statsViewDate.value.getFullYear();
-                Object.entries(checkins.value).forEach(([k, v]) => { const d = new Date(k); if (d.getMonth() === vm && d.getFullYear() === vy) { Object.entries(v).forEach(([id, data]) => { if (data.done) counts[id] = (counts[id] || 0) + 1; }); } });
-                return habits.value.map(h => ({ ...h, count: counts[h.id] || 0 })).filter(h => h.count > 0).sort((a, b) => b.count - a.count).slice(0, 3);
-            }),
-            topMonthMaxCount: computed(() => 1),
-            birdLevel, evolutionRequirement, mascotGreeting: computed(() => isAnimating.value ? "能量注入中！" : (birdLevel.value === 0 ? "嘿，孵化中..." : "羽毛亮晶晶！")),
-            isTodayComplete: computed(() => habits.value.length > 0 && habits.value.filter(h => h.selectedDays.includes(new Date().getDay())).every(h => checkins.value[getFormattedDate(new Date())]?.[h.id]?.done)),
-            todayDoneCount: computed(() => habits.value.filter(h => h.selectedDays.includes(new Date().getDay()) && checkins.value[getFormattedDate(new Date())]?.[h.id]?.done).length),
+            activeTab, habits, checkins, selectedDate, weekPivotDate, habitModal, logModal, swipedId, isAnimating, confettiList, habitErrors, statsViewDate, isHistoryMonthView, statsFilter,
+            tabTitlesShort, tabIcons, statsMonthLabel: computed(() => `${statsViewDate.value.getMonth() + 1}月`),
+            themeLibrary, suggestionHabits, birdLevel, mascotGreeting, totalCheckinCount,
+            topStats: computed(() => [{ label: '項目數', value: habits.value.length }, { label: '紀錄天', value: Object.keys(checkins.value).length }, { label: '總打卡', value: totalCheckinCount.value }, { label: '月完成', value: monthlyRanking.value.length }]),
+            evolutionRequirement, isSameDay, hasLog, isChecked, getMood, dayDoneCount, filteredWeeklyData, monthlyRanking,
+            habitsForSelectedDay, weekLabelsShort,
             sortedHabits: computed(() => [...habits.value].sort((a,b) => b.createdAt - a.createdAt)),
-            habitsForToday: computed(() => habits.value.filter(h => h.selectedDays.includes(new Date().getDay()))),
-            habitsForSelectedDay: computed(() => habits.value.filter(h => h.selectedDays.includes(selectedDate.value.getDay()))),
-            statsMonthLabel: computed(() => `${statsViewDate.value.getFullYear()}年 ${statsViewDate.value.getMonth() + 1}月`),
-            daysInMonth: computed(() => { const date = new Date(statsViewDate.value.getFullYear(), statsViewDate.value.getMonth(), 1); const days = []; while (date.getMonth() === statsViewDate.value.getMonth()) { days.push(new Date(date)); date.setDate(date.getDate() + 1); } return days; }),
-            monthOffset: computed(() => new Date(statsViewDate.value.getFullYear(), statsViewDate.value.getMonth(), 1).getDay()),
-            weekLabelsShort, formatDateFull, getFormattedDate, isSameDay: (d1, d2) => getFormattedDate(d1) === getFormattedDate(d2), hasLog, getMood,
-            isChecked: (id) => checkins.value[getFormattedDate(selectedDate.value)]?.[id]?.done || false,
-            isCheckedToday: (id) => checkins.value[getFormattedDate(new Date())]?.[id]?.done || false,
-            toggleCheckinToday: (id) => { const ds = getFormattedDate(new Date()); if(!checkins.value[ds]) checkins.value[ds] = {}; if(!checkins.value[ds][id]) checkins.value[ds][id] = {done:false, note:''}; checkins.value[ds][id].done = !checkins.value[ds][id].done; if(checkins.value[ds][id].done){isAnimating.value=true;setTimeout(()=>isAnimating.value=false,600);triggerConfetti();}},
-            handleCheckinFeedback,
-            toggleCalendarView: () => { isHistoryMonthView.value = !isHistoryMonthView.value; if(isHistoryMonthView.value) statsViewDate.value = new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth(), 1);},
-            selectDateFromMonth: (d) => { selectedDate.value = d; weekPivotDate.value = new Date(d); isHistoryMonthView.value = false; },
             changeWeek: (dir) => { weekPivotDate.value = new Date(weekPivotDate.value.setDate(weekPivotDate.value.getDate() + dir*7)); },
-            changeStatsMonth: (dir) => { statsViewDate.value = new Date(statsViewDate.value.setMonth(statsViewDate.value.getMonth() + dir)); },
-            saveHabit,
-            deleteHabit: (id) => {if(confirm('取消此計畫？')){habits.value=habits.value.filter(x=>x.id!==id);swipedId.value=null;}},
-            saveCheckinLog: () => { const ds = getFormattedDate(selectedDate.value); if(!checkins.value[ds]) checkins.value[ds]={}; checkins.value[ds][logModal.value.habit.id]={done:true, note:logModal.value.note}; logModal.value.show=false;},
-            handleTouchStart, handleTouchEnd,
-            selectSuggestion, handleSmartHint,
-            applyTheme: (t) => { habitModal.value.data.themeId=t.id; habitModal.value.data.color=t.color; habitModal.value.data.icon=t.icon; nextTick(() => { if (window.lucide) lucide.createIcons(); }); },
+            calendarDays: computed(() => {
+                const year = statsViewDate.value.getFullYear(); const month = statsViewDate.value.getMonth();
+                const firstDay = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const days = []; const prevMonthDays = new Date(year, month, 0).getDate();
+                for (let i = firstDay - 1; i >= 0; i--) { days.push({ date: new Date(year, month - 1, prevMonthDays - i), currentMonth: false }); }
+                for (let i = 1; i <= daysInMonth; i++) { days.push({ date: new Date(year, month, i), currentMonth: true }); }
+                const remaining = 42 - days.length;
+                for (let i = 1; i <= remaining; i++) { days.push({ date: new Date(year, month + 1, i), currentMonth: false }); }
+                return days;
+            }),
+            toggleCalendarView: () => { isHistoryMonthView.value = !isHistoryMonthView.value; },
+            changeMonth: (dir) => { statsViewDate.value = new Date(statsViewDate.value.setMonth(statsViewDate.value.getMonth() + dir)); },
+            saveHabit, openHabitModal, handleSmartHint, selectSuggestion, handleCheckinFeedback, saveCheckinLog,
+            applyTheme: (theme) => { habitModal.value.data.themeId = theme.id; habitModal.value.data.color = theme.color; habitModal.value.data.icon = theme.icon; nextTick(() => { if (window.lucide) lucide.createIcons(); }); },
             selectWorkdays: () => { habitModal.value.data.selectedDays = [1,2,3,4,5]; },
-            toggleDayInModal: (i) => { const idx = habitModal.value.data.selectedDays.indexOf(i); if(idx > -1){ if(habitModal.value.data.selectedDays.length > 1) habitModal.value.data.selectedDays.splice(idx,1);}else{habitModal.value.data.selectedDays.push(i);habitModal.value.data.selectedDays.sort();}},
-            openHabitModal,
-            getHabitTotalDone: (id) => { let t=0; Object.values(checkins.value).forEach(d=>{if(d[id]?.done)t++;}); return t; },
-            weekDays: computed(() => { const res = []; const curr = new Date(weekPivotDate.value); const first = curr.getDate() - curr.getDay(); for(let i=0; i<7; i++){ const d = new Date(weekPivotDate.value); d.setDate(first+i); res.push({date:d, dayNum:d.getDate(), label:weekLabelsShort[i]});} return res; }),
-            totalStreaks: computed(() => { let s=0; let d = new Date(); while(checkins.value[getFormattedDate(d)] && Object.values(checkins.value[getFormattedDate(d)]).some(l=>l.done)){s++; d.setDate(d.getDate()-1);} return s; })
+            toggleDayInModal: (i) => {
+                const idx = habitModal.value.data.selectedDays.indexOf(i);
+                if(idx > -1){ if(habitModal.value.data.selectedDays.length > 1) habitModal.value.data.selectedDays.splice(idx,1);}
+                else{habitModal.value.data.selectedDays.push(i);habitModal.value.data.selectedDays.sort();}
+            },
+            toggleHabitActive: (habit) => { habit.isActive = !habit.isActive; },
+            deleteHabit: (id) => { if(confirm('取消此計畫？')){ habits.value = habits.value.filter(x=>x.id!==id); } },
+            handleTouchStart: (e, id) => { touchStartX = e.touches[0].clientX; },
+            handleTouchEnd: (e, id) => { const diff = touchStartX - e.changedTouches[0].clientX; if (diff > 50) swipedId.value = id; else if (diff < -50) swipedId.value = null; },
+            getMonthlyDoneCount: (id) => Object.entries(checkins.value).filter(([ds, logs]) => new Date(ds).getMonth() === new Date().getMonth() && logs[id]?.done).length,
+            getHabitStreak: (id) => {
+                let streak = 0; let curr = new Date();
+                const check = (d) => checkins.value[getFormattedDate(d)]?.[id]?.done || false;
+                while (check(curr)) { streak++; curr.setDate(curr.getDate() - 1); }
+                return streak;
+            },
+            formatDateSimpleShort: (ts) => `${new Date(ts).getMonth()+1}/${new Date(ts).getDate()}`,
+            weekDays: computed(() => {
+                const res = []; const curr = new Date(weekPivotDate.value); const first = curr.getDate() - curr.getDay();
+                for(let i=0; i<7; i++){ const d = new Date(weekPivotDate.value); d.setDate(first+i); res.push({date:d, dayNum:d.getDate(), label:weekLabelsShort[i]}); }
+                return res;
+            })
         };
     }
 }).mount('#app');
